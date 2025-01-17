@@ -2,6 +2,7 @@
   "name": "knowledge-base",
   "private": true,
   "scripts": {
+    "build:gradle": "cd apps/kotlin-app && ./gradlew build",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",

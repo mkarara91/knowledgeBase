@@ -1,0 +1,48 @@
+# Simple deployment used to deploy and manage the app in nigelpoulton/ps-web:1.0
+# this is an eample deployment for vlumes using empty dir
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 5
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec: 
+      terminationGracePeriodSeconds: 1
+      containers:
+      - name: nginx-pod
+        image: nginx:alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts: 
+          - name: html 
+            mountPath: /usr/share/nginx/html
+            readOnly: true 
+        resources:
+      - name: html-updater 
+        image: alpine 
+        command: ["/bin/sh", "-c"] 
+        args: 
+          - while true; do date >> /html/index.html;sleep 10; done 
+        resources:
+        volumeMounts: 
+          - name: html 
+            mountPath: /html 
+      volumes: 
+      - name: html 
+        emptyDir: {} #lifecycle tied to Pod

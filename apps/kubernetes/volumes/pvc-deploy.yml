@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvc-app
+  labels:
+    app: my-pvc-app
+spec:
+  selector:
+    matchLabels:
+      app: my-pvc-app
+  replicas: 5
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: my-pvc-app
+    spec:
+      containers:
+      - name: my-pvc-app
+        image: nginx:alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        command:
+        - /bin/sh
+        - -c
+        - while true; do echo $(date) >> /mnt/blobdisk/outfile; sleep 1; done
+        volumeMounts:
+        - name: my-pv-disk
+          mountPath: /mnt/blobdisk
+        resources:
+      volumes:
+      - name: my-pv-disk
+        persistentVolumeClaim:
+          claimName: pvc-example

@@ -1,60 +1,44 @@
-const possibleMoves = [-2,-1,1,2];
+// i = 0 row, i = 1 column
+const possibleMoves = [[1,2], [2,1], [2,-1], [1,-2], [-1,-2], [-2, -1], [-2, 1], [-1, 2]];
 
-
-const iteratePossibleMoves = (n: number, row: number, column: number, callback: any) => {
-  for(let i = 0; i< possibleMoves.length; i++){
-    for (let j = 0; j< possibleMoves.length; j++){
-        if(possibleMoves[i] === possibleMoves[j]){
-            continue;
-        }
-      const newRow = row + possibleMoves[i];
-      const newColumn = column+possibleMoves[j];
-      if(newRow === 0 || newColumn === 0){
-        continue;
-      }
-      if((newRow >= 0 && newRow < n) && (newColumn >= 0 && newColumn < n)){
-        callback(newRow, newColumn);
-      }
-    }
-  }
-}
 
 function knightProbability(n: number, k: number, row: number, column: number): number {
-    if(k === 0) {
-      return 1;
-    }
-    const probs = [];
-    for(let i = 0 ; i< k; i++){
-      
-      probs.push(getNumberOfPossibleMoves(n, row, column) / 8);
-    }
-    let probabilityInCell = getNumberOfPossibleMoves(n, row, column) / 8;
-      
+  if(k === 0) {
+    return 1;
+  }
+  let board = Array.from({length: n}, () => Array(n).fill(0));
+  board[row][column] = 1;
+
+
+  for(let i = 0; i < k; i++){
+    const newBoard = Array.from({length: n}, () => Array(n).fill(0));
     
-
-
-    
-    let probabilities = [probabilityInCell];
-    iteratePossibleMoves(n, row, column, (i: number, j: number) => {
-      probabilities.push(knightProbability(n, k-1, i, j));
-    });
-
-    let actualProbs = probabilities[0];
-
-    for(let i = 1; i < k; i ++){
-      actualProbs = actualProbs * probabilities[i];
+    for(let r = 0; r < n; r++) {
+      for(let c = 0; c < n; c++) {
+        possibleMoves.forEach(moves => {
+          const nr = r +moves[0];
+          const nc = c +moves[1];
+          if(isInsideBoard(n, nr, nc)){
+            newBoard[r][c] += board[nr][nc]/8;
+          }
+        });
+      }
     }
+    board = newBoard;
+  }
 
-    return actualProbs;
+  let prob = 0;
+  for(let r = 0; r < n; r++) {
+    for(let c = 0; c < n; c++) {
+      prob += board[r][c]
+    }
+  }
+
+  return prob;
 };
 
-const getNumberOfPossibleMoves = (n: number, row: number, column: number) => {
-  const possible = new Set<{row: number, column: number}>();
-  iteratePossibleMoves(n, row, column, (i: number, j: number) => {
-    possible.add({row: i, column: j});
-  })
-  console.log(possible)
-  return possible.size;
+const isInsideBoard = (n: number, r: number, c: number) => {
+  return r >= 0 && r < n && c >= 0 && c < n;
 }
 
 export default knightProbability;

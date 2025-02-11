@@ -9,6 +9,9 @@ spec:
   #   Replace (replace unfinished job with new one)
   concurrencyPolicy: Allow 
   schedule: "*/1 * * * *" # Run the job every minute
+  startingDeadlineSeconds: 30 # if a job doesn't start in 30 seconds it will be killed
+  succesfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 2
   jobTemplate:
     spec:
       template:

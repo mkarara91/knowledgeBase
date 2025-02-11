@@ -6,6 +6,8 @@ spec:
   completions: 4 # require 4 Pods to complete for a succesful job
   parallelism: 2 # allow up to 2 Pods to run in parallel
   activeDeadlineSeconds: 240 # how long can the job be active before it's terminated?
+  backoffLimit: 4 # number of retries before failing
+  ttlSecondsAfterFinished: 120 # number of seconds the job stays up after it is finished
   template:
     metadata:
       name: pie-counter

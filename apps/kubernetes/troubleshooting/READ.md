@@ -13,3 +13,5 @@ kubectl describe pod [pod-name]
 kubectl get pod/deployment [pod-name] -o yaml -->more detailed view in yaml or json format
 
 kubectl exec [pod-name] -it sh
+
+kubectl config set-context --cuurent -n=name ---> sets the name space and context

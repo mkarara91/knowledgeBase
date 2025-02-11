@@ -32,6 +32,10 @@ spec: ---> ReplicaSet spec
       labels:
         tier: frontend
     spec: ---> Pod spec
+      initContainers: ---> runs first
+      - name: svc-check
+        image: busybox
+        command: []
       containers:
       - name: my-nginx
         image: nginx:alpine
@@ -61,6 +65,22 @@ kubectl rollout history deployment [name] --revision=2
 kubectl rollout undo -f filename --> rollback to previous one
  
 kubectl rollout undo deployment [name] --to-revision=2 ---> rollback to specific version
+
+kubectl create deployment [deployment name] --image=nginx:alpine --dry-run=client -o yaml > deploy.yaml -----> create a deployment file and output the file.. can be done with other resources
+
+kubectl set image [image-name] [deployment] --> set deployed image
+
+kubectl set selector svc [service-name] 'role=green' -> sets a selector property to role green
+
+kubectl expose deploy [deployment-name] --port=9000 --target-port=80 --type=NodePort --name=[svc-name]   ->> creates a new service with tyoe and ports
+
+KUBE_EDITOR="nano" kubectl edit deploy/nginx-deploy ---> change the editor to nano
+
+kubectl run -it --restart=Never --image=alpine [pod name]  --> creates a pod and shells into it
+
+kubectl annotate deploy [deployment name] kubernetes.io/change-cause="" --overwrite=true
+
+kubectl get deploy [name] -o json | jq 'metadata.annotations."kubernetes.io/change-cause"'   ->> displays specific json value
 
 
 imperative deployment RS scaling

@@ -20,7 +20,7 @@
 1. From here you can load other dashboards or create your own!
 
 **NOTE**: The Metrics Server YAML has been modified to enable it to run in more simple Kubernetes scenarios like Docker Desktop. Details about the modifications made can be found at https://blog.codewithdan.com/enabling-metrics-server-for-kubernetes-on-docker-desktop. You'll want to remove the `--kubelet-insecure-tls` arg in `metrics-server/kubernetes/metrics-server-deployment.yaml` for more real-world scenarios.
-
+ `
 ## Removing Resources
 
 To remove all of the monitoring resources run `kubectl delete -f ./ -R`.

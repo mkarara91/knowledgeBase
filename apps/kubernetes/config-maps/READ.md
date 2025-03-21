@@ -1,10 +1,13 @@
 ConfigMaps:
 - ConfigMaps provide a way to inject configuration data into containers
 - store it in key value pairs
+- data must be less than 1 mb
 
 ConfigMaps can be accessed from a Pod using:
 - Environment variables (key/value)
 - ConfigMap Volume (access as files)
+- as an argument
+- with self written code
 
 Commands:
 kubectl create configmap [name]
